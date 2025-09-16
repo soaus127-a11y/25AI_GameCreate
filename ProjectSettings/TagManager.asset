@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Tag Destroyer
   - SpikeDestroyer
+  - Floor
+  - Enemy
   layers:
   - Default
   - TransparentFX
