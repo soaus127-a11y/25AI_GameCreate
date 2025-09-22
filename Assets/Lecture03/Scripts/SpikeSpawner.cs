@@ -1,23 +1,42 @@
 using UnityEngine;
+using System.Collections;
 
 public class SpikeSpawner : MonoBehaviour
 {
     public GameObject SpikePrefab;
-    bool a = true;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private Coroutine spawnRoutine;
+
+    private bool isGameOver = false;
+
     void Start()
     {
-        
+        spawnRoutine = StartCoroutine(SpawnSpikeRoutine());
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator SpawnSpikeRoutine()
     {
-        if (a) {
+        while (!isGameOver)
+        {
+            float waitTime = Random.Range(1f, 4f);
+            yield return new WaitForSeconds(waitTime);
+
+            if (isGameOver)
+                yield break; // 게임오버면 코루틴 종료
+
+            Debug.Log("Spawner : Spike 생성!");
             GameObject spike = Instantiate(SpikePrefab);
             spike.transform.position = transform.position;
-            a = false;
         }
-        
+    }
+
+    // 게임오버 시 호출되는 함수
+    public void GameOver()
+    {
+        isGameOver = true;
+        if (spawnRoutine != null)
+        {
+            StopCoroutine(spawnRoutine);
+        }
+        Debug.Log("게임 종료 - 스파이크 생성 멈춤");
     }
 }
